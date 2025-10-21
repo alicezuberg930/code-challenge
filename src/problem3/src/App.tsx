@@ -33,9 +33,10 @@ interface Props extends BoxProps {
   children: React.ReactNode
 }
 
-// forgot to export the component to use in other files 
-export const WalletPage: React.FC<Props> = (props: Props) => {
-  const { children, ...rest } = props;
+// forgot to export the WalletPage component to render the page or use in other files as component
+export const WalletPage: React.FC<Props> = ({ children, ...rest }: Props) => {
+  // unnecessary destructuring. we can do that in the function props instead
+  // const { children, ...rest } = props;
   // missing balances and prices hooks (i assumed this is a hook for fetching data from an API)
   // balances has a data type of WalletBalance array
   const balances: WalletBalance[] = useWalletBalances();
@@ -69,7 +70,8 @@ export const WalletPage: React.FC<Props> = (props: Props) => {
       // the lhsPriority variable isn't even initialize but the balancePriority is initialized and not used.
       // so we can replace lhsPriority with balancePriority 
       if (balancePriority > -99) {
-        if (balance.amount <= 0) {
+        // im pretty sure that crypto wallet amount cannot be less than 0
+        if (balance.amount >= 0) {
           return true;
         }
       }
@@ -123,10 +125,12 @@ export const WalletPage: React.FC<Props> = (props: Props) => {
       />
     )
   })
-
+  console.log(sortedBalances)
   return (
     <div {...rest}>
       {rows}
+      {/* use children */}
+      {children}
     </div>
   )
 }
